@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from app.database import SessionLocal, Base, engine
 from app import models, utils
-from app.schemas import URLRequest, URLResponse
+from app.schemas import URLRequest, URLResponse, URLAnalytics
 
 # Create DB tables
 Base.metadata.create_all(bind=engine)
@@ -39,9 +39,21 @@ def redirect_url(short_code:str, db: Session = Depends(get_db)):
 	if url is None:
 		raise HTTPException(status_code=404, detail="Short URL not found")
 
-
 	# update click count
 	url.visit_count += 1
 	db.commit()
 
 	return RedirectResponse(url.original_url)
+
+@app.get("/analytics/{short_code}", response_model=URLAnalytics)
+def get_analytics(short_code: str, db: Session = Depends(get_db)):
+	url = db.query(models.URL).filter(models.URL.short_code == short_code).first()
+
+	if url is None:
+		raise HTTPException(status_code=404, details="Short URL not found")
+
+	return {
+		"short_code": url.short_code,
+		"original_url": url.original_url,
+		"visit_count": url.visit_count
+	}
