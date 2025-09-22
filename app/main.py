@@ -55,5 +55,7 @@ def get_analytics(short_code: str, db: Session = Depends(get_db)):
 	return {
 		"short_code": url.short_code,
 		"original_url": url.original_url,
-		"visit_count": url.visit_count
+		"visit_count": url.visit_count,
+		"created_at": url.created_at,
+		"expires_at": url.expires_at
 	}
