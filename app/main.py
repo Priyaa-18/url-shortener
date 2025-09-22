@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.database import SessionLocal, Base, engine
 from app import models, utils
 from app.schemas import URLRequest, URLResponse, URLAnalytics
+from typing import List
 
 # Create DB tables
 Base.metadata.create_all(bind=engine)
@@ -32,18 +33,10 @@ def shorten_url(request: URLRequest, db: Session = Depends(get_db)):
 
     return {"short_url": f"http://127.0.0.1:8000/{short_code}"}
 
-@app.get("/{short_code}")
-def redirect_url(short_code:str, db: Session = Depends(get_db)):
-	url = db.query(models.URL).filter(models.URL.short_code == short_code).first()
-
-	if url is None:
-		raise HTTPException(status_code=404, detail="Short URL not found")
-
-	# update click count
-	url.visit_count += 1
-	db.commit()
-
-	return RedirectResponse(url.original_url)
+@app.get("/analytics", response_model=List[URLAnalytics])
+def get_all_analytics(db: Session = Depends(get_db)):
+	urls = db.query(models.URL).all()
+	return urls
 
 @app.get("/analytics/{short_code}", response_model=URLAnalytics)
 def get_analytics(short_code: str, db: Session = Depends(get_db)):
@@ -59,3 +52,16 @@ def get_analytics(short_code: str, db: Session = Depends(get_db)):
 		"created_at": url.created_at,
 		"expires_at": url.expires_at
 	}
+
+@app.get("/{short_code}")
+def redirect_url(short_code:str, db: Session = Depends(get_db)):
+	url = db.query(models.URL).filter(models.URL.short_code == short_code).first()
+
+	if url is None:
+		raise HTTPException(status_code=404, detail="Short URL not found")
+
+	# update click count
+	url.visit_count += 1
+	db.commit()
+
+	return RedirectResponse(url.original_url)
