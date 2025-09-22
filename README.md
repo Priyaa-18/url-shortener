@@ -57,7 +57,7 @@ graph TD;
   FastAPI --> ORM[SQLAlchemy ORM]
   ORM --> DB[SQLite Database]
   FastAPI --> Utils[utils.py: Short Code Generation]
-  FastAPI --> Schemas[Models & Schemas (Pydantic)]
+  FastAPI --> Schemas[Models & Schemas: Pydantic]
   FastAPI --> Redirect[RedirectResponse]
 ```
 
