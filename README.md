@@ -52,13 +52,13 @@ ReDoc: http://127.0.0.1:8000/redoc
 
 ## Architecture
 ```mermaid
-graph TD;
-  Client[Client] --> FastAPI[FastAPI: app/main.py]
-  FastAPI --> ORM[SQLAlchemy ORM]
-  ORM --> DB[SQLite Database]
-  FastAPI --> Utils[utils.py: Short Code Generation]
-  FastAPI --> Schemas[Models & Schemas: Pydantic]
-  FastAPI --> Redirect[RedirectResponse]
+flowchart TD
+    Client[Client] --> FastAPI[FastAPI: app/main.py]
+    FastAPI --> Schemas[Validate Input: Pydantic Schemas]
+    FastAPI --> Utils[Generate Short Code: utils.py]
+    FastAPI --> ORM[SQLAlchemy ORM]
+    ORM --> DB[(SQLite Database)]
+    FastAPI --> Redirect[RedirectResponse: Return to Client]
 ```
 
 - **FastAPI:** RESTful API endpoints
