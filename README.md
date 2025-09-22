@@ -29,7 +29,7 @@ Built with **FastAPI**, **SQLite**, and **SQLAlchemy**, this project explores sy
 **Setup:**
 ```bash
 # Clone the repo
-git clone https://github.com/<your-username>/url-shortener.git
+git clone https://github.com/Priyaa-18/url-shortener.git
 cd url-shortener
 
 # Create virtual environment
@@ -99,15 +99,11 @@ Response:
 }
 ```
 
----
-
 ### 2. Redirect to Original
 ```http
 GET /abc123
 ```
 → Redirects to https://apple.com/iphone17
-
----
 
 ### 3. Get Analytics for One URL
 ```http
@@ -124,8 +120,6 @@ Response:
 }
 ```
 
----
-
 ### 4. Get All Analytics
 ```http
 GET /analytics
@@ -133,6 +127,8 @@ GET /analytics
 ```json
 Response: [ {…}, {…}, {…} ]
 ```
+
+---
 
 ## Analytics
 - **Visit Counts:** Each redirect increments a counter
